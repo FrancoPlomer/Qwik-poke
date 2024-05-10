@@ -1,6 +1,6 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
-import { RouterHead } from './components/router-head/router-head';
+import { RouterHead } from './components/shared/router-head/router-head';
 
 import './global.css';
 
@@ -11,6 +11,15 @@ export default component$(() => {
    *
    * Dont remove the `<head>` and `<body>` elements.
    */
+  useVisibleTask$(() => {
+    (globalThis as any).qwikOpenInEditor = function (path: string) {
+      const resolvedURL = new URL(path, "http://local.local");
+      const params = new URLSearchParams();
+      const srcDir = (globalThis as any).qwikdevtools.srcDir;
+      params.set("file", srcDir + resolvedURL.pathname);
+      fetch("/__open-in-editor?" + params.toString());
+    };
+  });
 
   return (
     <QwikCityProvider>

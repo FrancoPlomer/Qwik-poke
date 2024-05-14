@@ -1,83 +1,86 @@
 import { useNavigate, type DocumentHead } from '@builder.io/qwik-city';
-import { 
-  $, component$, useSignal  
+import {
+  $, component$, useContext
 } from '@builder.io/qwik';
 import { PokemonImage } from '~/components/pokemons/pokemon-image';
+import { PokemonGameContext } from '~/context';
 
 export default component$(() => {
 
   const nav = useNavigate();
 
-  const pokemonId     = useSignal<number>( 1 ); 
-  const showBackImage = useSignal<boolean>( false ); 
-  const showImage     = useSignal<boolean>( false ); 
+  const pokemonGame = useContext(PokemonGameContext);
+
+  // const pokemonId     = useSignal<number>( 1 ); 
+  // const showBackImage = useSignal<boolean>( false ); 
+  // const showImage     = useSignal<boolean>( false ); 
 
   //El simbolo de dolar indica que la carga de ese elemento javascript es peresoza
 
   const handleChange = $(
-    ( newValue: number ) => {
-    
-      if ( newValue <= 0 ) return;
-      
-      showImage.value = false;
-      pokemonId.value = newValue;
+    (newValue: number) => {
+
+      if (newValue <= 0) return;
+
+      pokemonGame.showImage = false;
+      pokemonGame.pokemonId = newValue;
     }
   );
 
   const handleTypeShowImage = $(
-    () => showBackImage.value = !showBackImage.value
+    () => pokemonGame.showBackImage = !pokemonGame.showBackImage
   )
 
   const handleShowImage = $(
-    () => showImage.value = true
+    () => pokemonGame.showImage = true
   )
 
   const goToPokemon = $(
-    () => nav( `/pokemon/${pokemonId.value}` )
+    () => nav(`/pokemon/${pokemonGame.pokemonId}`)
   )
 
   return (
     <>
       <span class="text-2xl">Buscador simple</span>
-      <span class="text-9xl">{ pokemonId }</span>
-      <a style={{ cursor: 'pointer' }} onClick$={ () => goToPokemon() }>
-        <PokemonImage 
-          size={ 200 } 
-          id={ pokemonId.value }
-          showImage={ showImage.value } 
-          backImage={ showBackImage.value }
+      <span class="text-9xl">{pokemonGame.pokemonId}</span>
+      <a style={{ cursor: 'pointer' }} onClick$={() => goToPokemon()}>
+        <PokemonImage
+          size={200}
+          id={pokemonGame.pokemonId}
+          showImage={pokemonGame.showImage}
+          backImage={pokemonGame.showBackImage}
         />
       </a>
       <div class="mt-2">
-        <button 
-          name="prev" 
+        <button
+          name="prev"
           class="btn btn-primary mr-2"
-          onClick$={ 
-            () => handleChange( pokemonId.value - 1 ) 
-          } 
+          onClick$={
+            () => handleChange(pokemonGame.pokemonId - 1)
+          }
         >
           Anterior
         </button>
-        <button 
-          name="next" 
+        <button
+          name="next"
           class="btn btn-primary mr-2"
-          onClick$={ 
-            () => handleChange( pokemonId.value + 1 ) 
-          } 
+          onClick$={
+            () => handleChange(pokemonGame.pokemonId + 1)
+          }
         >
           Siguiente
         </button>
-        <button 
-          name="next" 
+        <button
+          name="next"
           class="btn btn-primary mr-2"
-          onClick$={ () => handleTypeShowImage() } 
+          onClick$={() => handleTypeShowImage()}
         >
           Voltear
         </button>
-        <button 
-          name="next" 
+        <button
+          name="next"
           class="btn btn-primary"
-          onClick$={ () => handleShowImage() } 
+          onClick$={() => handleShowImage()}
         >
           Revelar
         </button>

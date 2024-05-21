@@ -9,7 +9,7 @@ export default component$(() => {
     <header class={styles.header}>
       <div class={['container', styles.wrapper]}>
         <div style={{ cursor: 'pointer' }} class={styles.logo}>
-          <a  onClick$={() => nav('/')} title="qwik">
+          <a onClick$={() => nav('/')} title="qwik">
             <QwikLogo height={50} />
           </a>
         </div>
@@ -22,6 +22,11 @@ export default component$(() => {
           <li>
             <a style={{ cursor: 'pointer' }} onClick$={() => nav('/pokemons/list-client')}>
               List-client
+            </a>
+          </li>
+          <li>
+            <a style={{ cursor: 'pointer' }} onClick$={() => nav('/counter')}>
+              Counter
             </a>
           </li>
         </ul>

@@ -1,6 +1,7 @@
-import { component$, useComputed$ } from '@builder.io/qwik';
-import { PokemonImage } from '~/components/pokemons/pokemon-image';
+import { Modal } from '~/components/shared';
+import { $, component$, useComputed$, useSignal, useStore } from '@builder.io/qwik';
 import { getSmallPokemons } from '~/helpers/get-small-pokemons';
+import { PokemonImage } from '~/components/pokemons/pokemon-image';
 import { 
   routeLoader$, useLocation, useNavigate, 
   type DocumentHead 
@@ -30,12 +31,33 @@ export default component$(() => {
   const location = useLocation();
   const pokemons = usePokemonList();
 
+  const ModalVisible = useSignal( false );
+  const modalPokemon = useStore({
+    id: '',
+    name: ''
+  })
+
   const currentOffset = useComputed$<number>(() => (
       Number(
         new URLSearchParams( location.url.search ).get('offset') || 0
       )
     )
-  );  
+  ); 
+  
+  const showModal = $(
+    ( id: string, name: string) => {
+      
+      modalPokemon.id     = id;
+      modalPokemon.name   = name;
+      ModalVisible.value  = true;
+    }
+  );
+
+  const closeModal = $(
+    () => {
+      ModalVisible.value = false;
+    }
+  );
   
   return (
     <>
@@ -67,7 +89,8 @@ export default component$(() => {
         {
           pokemons.value.map( ({ id, name }:{ id:string, name:string }) => (
             <div 
-              key={ id } 
+              key={ id }
+              onClick$={ () => showModal(id, name) } 
               class="m-5 flex flex-col justify-center items-center"
             >
               <PokemonImage showImage id={ id } />
@@ -76,6 +99,24 @@ export default component$(() => {
           ))
         }
       </div>
+
+      <Modal
+        size='sm'
+        CloseFn={ closeModal }
+        showModal={ ModalVisible.value } 
+      >
+        <div q:slot='title'>
+          {
+            modalPokemon.name
+          }
+        </div>
+        <div class='flex flex-col justify-center items-center' q:slot='content'>
+          <PokemonImage showImage id={ modalPokemon.id } />
+          <span>
+            Preguntandole a chatGPT
+          </span>
+        </div>
+      </Modal>
     </>
   )
 });

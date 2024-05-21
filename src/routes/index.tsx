@@ -1,43 +1,17 @@
-import { useNavigate, type DocumentHead } from '@builder.io/qwik-city';
-import {
-  $, component$, useContext
-} from '@builder.io/qwik';
+import { type DocumentHead } from '@builder.io/qwik-city';
+import { component$ } from '@builder.io/qwik';
 import { PokemonImage } from '~/components/pokemons/pokemon-image';
-import { PokemonGameContext } from '~/context';
+import { usePokemonGame } from '~/hooks/use-pokemon-game';
 
 export default component$(() => {
 
-  const nav = useNavigate();
-
-  const pokemonGame = useContext(PokemonGameContext);
-
-  // const pokemonId     = useSignal<number>( 1 ); 
-  // const showBackImage = useSignal<boolean>( false ); 
-  // const showImage     = useSignal<boolean>( false ); 
-
-  //El simbolo de dolar indica que la carga de ese elemento javascript es peresoza
-
-  const handleChange = $(
-    (newValue: number) => {
-
-      if (newValue <= 0) return;
-
-      pokemonGame.showImage = false;
-      pokemonGame.pokemonId = newValue;
-    }
-  );
-
-  const handleTypeShowImage = $(
-    () => pokemonGame.showBackImage = !pokemonGame.showBackImage
-  )
-
-  const handleShowImage = $(
-    () => pokemonGame.showImage = true
-  )
-
-  const goToPokemon = $(
-    () => nav(`/pokemon/${pokemonGame.pokemonId}`)
-  )
+  const {
+    pokemonGame,
+    goToPokemon,
+    handleChange,
+    handleShowImage,
+    handleTypeShowImage,
+  } = usePokemonGame();
 
   return (
     <>

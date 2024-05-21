@@ -24,28 +24,35 @@ export const PokemonImage = component$(( props : Props ) => {
     })
     
     return (
-        <div 
-            class='flex items-center justify-center' 
-            style={{ 
-                width: `${ size }px`, 
-                height: `${ size }px` 
-            }}
-        >
-            { !imageLoaded.value && <span>Cargando..</span> }
-            <img 
-                alt="pokeImg" 
-                style={{ width: `${ size }px` }}
-                onLoad$={ () => imageLoaded.value = true }
-                class={{
-                    'hidden': !imageLoaded.value,
-                    'brightness-0': !showImage
-                }}
-                src={``+
-                    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/`+
-                    `${ backImage ? '/back/' : '' }`+
-                    `${ id }.png`+
-                ``} 
-            />
-        </div>
+        <>
+            {
+                String( id ).length ? (
+                    <div 
+                        class='flex items-center justify-center' 
+                        style={{ 
+                            width: `${ size }px`, 
+                            height: `${ size }px` 
+                        }}
+                    >
+                        { !imageLoaded.value && <span>Cargando..</span> }
+                        <img 
+                            alt="pokeImg" 
+                            style={{ width: `${ size }px` }}
+                            onLoad$={ () => imageLoaded.value = true }
+                            class={{
+                                'hidden': !imageLoaded.value,
+                                'brightness-0': !showImage
+                            }}
+                            src={``+
+                                `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/`+
+                                `${ backImage ? '/back/' : '' }`+
+                                `${ id }.png`+
+                            ``} 
+                        />
+                    </div>
+                ) :
+                ''
+            }
+        </>
     )
 });

@@ -29,6 +29,16 @@ export default component$(() => {
               Counter
             </a>
           </li>
+          <li>
+            <a style={{ cursor: 'pointer' }} onClick$={() => nav('/Login')}>
+              Login
+            </a>
+          </li>
+          <li>
+            <a style={{ cursor: 'pointer' }} onClick$={() => nav('/dashboard')}>
+              dashboard admin
+            </a>
+          </li>
         </ul>
       </div>
     </header>
